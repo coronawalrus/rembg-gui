@@ -15,6 +15,27 @@
 
         <main>
             <!-- Upload Section -->
+            <div id="model-selector-container" class="model-selector" style="margin-bottom: 20px; text-align: center;">
+                <label for="model-select" style="font-weight: bold;">Select AI Model: </label>
+                <select id="model-select" name="model" style="padding: 8px; border-radius: 5px; margin-left: 10px;">
+                    <option value="u2net" selected="">u2net (General purpose, default)</option>
+                    <option value="u2netp">u2netp (Lighter &amp; faster)</option>
+                    <option value="u2net_human_seg">u2net_human_seg (Optimized for humans)</option>
+                    <option value="u2net_cloth_seg">u2net_cloth_seg (Clothing parsing)</option>
+                    <option value="silueta">silueta (Small, fast general model)</option>
+                    <option value="isnet-general-use">isnet-general-use (Great for products)</option>
+                    <option value="isnet-anime">isnet-anime (Anime/manga style)</option>
+                    <option value="sam">sam (Any use case)</option>
+                    <option value="birefnet-general">birefnet-general (General use case)</option>
+                    <option value="birefnet-general-lite">birefnet-general-lite (General use case)</option>
+                    <option value="birefnet-portrait">birefnet-portrait (Human portraits)</option>
+                    <option value="birefnet-dis">birefnet-dis (dichotomous image segmentation)</option>
+                    <option value="birefnet-hrsod">birefnet-hrsod (high-resolution salient object detection)</option>
+                    <option value="birefnet-cod">birefnet-cod (concealed object detection)</option>
+                    <option value="birefnet-massive">birefnet-massive (trained on massive dataset)</option>
+                    <option value="bria-rmbg">bria-rmbg (bria AI)</option>
+                </select>
+            </div>
             <section class="upload-section" id="uploadSection">
                 <div class="upload-box" id="uploadBox">
                     <div class="upload-icon">📁</div>
