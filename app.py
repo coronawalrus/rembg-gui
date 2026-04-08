@@ -1,16 +1,56 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from rembg import remove
+from rembg import remove, new_session
 from PIL import Image
 import io
 import base64
 import os
+import threading
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app)
 
 # Configuration
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB limit
+
+model_sessions = {}
+session_lock = threading.Lock()
+
+ALLOWED_MODELS = {
+    "u2net", 
+    "u2netp", 
+    "u2net_human_seg", 
+    "u2net_cloth_seg", 
+    "silueta", 
+    "isnet-general-use", 
+    "isnet-anime",
+    "sam",
+    "birefnet-general",
+    "birefnet-general-lite",
+    "birefnet-portrait",
+    "birefnet-dis",
+    "birefnet-hrsod",
+    "birefnet-cod",
+    "birefnet-massive",
+    "bria-rmbg"
+}
+
+def get_model_session(model_name):
+    """Fetches a cached session, or loads it if it hasn't been requested yet."""
+    
+    # Fallback to default if the user requests an invalid model
+    if model_name not in ALLOWED_MODELS:
+        model_name = "u2net" 
+        
+    # Lazy loading: Only load the model if it's not already in RAM
+    if model_name not in model_sessions:
+        with session_lock:
+            # Double-check inside the lock to ensure another thread didn't just load it
+            if model_name not in model_sessions:
+                print(f"Loading {model_name} into memory for the first time...")
+                model_sessions[model_name] = new_session(model_name)
+                
+    return model_sessions[model_name]
 
 @app.route('/')
 def index():
@@ -38,9 +78,12 @@ def remove_background():
         
         # Read the image
         input_image = file.read()
+
+        requested_model = request.form.get('model', 'u2net')
+        current_session = get_model_session(requested_model)
         
         # Remove background
-        output_image = remove(input_image)
+        output_image = remove(input_image, session=current_session)
         
         # Convert to base64 for sending back to client
         output_base64 = base64.b64encode(output_image).decode('utf-8')
