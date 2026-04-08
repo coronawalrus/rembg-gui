@@ -116,6 +116,8 @@ function handleDrop(event) {
 // Process image
 async function processImage(file) {
     try {
+        document.getElementById('model-selector-container').style.display = 'none';
+        
         // Show processing section
         showSection('processing', 'Removing background...');
         
