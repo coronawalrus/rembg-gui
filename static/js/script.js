@@ -130,6 +130,7 @@ async function processImage(file) {
             // Send to backend for background removal
             const formData = new FormData();
             formData.append('image', file);
+            formData.append('model', document.getElementById('model-selector-container').value);
             
             const response = await fetch('/api/remove-background', {
                 method: 'POST',
