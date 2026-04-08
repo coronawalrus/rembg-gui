@@ -321,6 +321,7 @@ function resetApp() {
     finalResult.classList.add('hidden');
     bgImagePreview.classList.add('hidden');
     showSection('upload');
+    document.getElementById('model-selector-container').style.display = 'block';
 }
 
 // Download final image
